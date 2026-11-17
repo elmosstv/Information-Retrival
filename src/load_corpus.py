@@ -1,5 +1,5 @@
 import json
-import helpers from elasticsearch
+from elasticsearch import helpers
 from es_client import get_client
 
 INDEX ='scifact_docs'
@@ -10,7 +10,7 @@ es = get_client()
 if es.indices.exists(index=INDEX):
     es.indices.delete(index=INDEX)
 
-es.indices.create(index=INDEX, mapping={
+es.indices.create(index=INDEX, mappings={
     "properties": {
         "title": {"type": "text"},
         "text": {"type": "text"}
@@ -23,7 +23,7 @@ def actions():
             doc = json.loads(line)
             yield {
                 "_index": INDEX,
-                "_id": doc["doc_id"],
+                "_id": doc["_id"],
                 "_source": {
                     "title": doc["title"],
                     "text": doc["text"]
